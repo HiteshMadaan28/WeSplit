@@ -16,6 +16,14 @@ struct ContentView: View{
     
     var tipPercentages = [10,15,20,25,0]
     
+    var checkPlusTip:Double{
+        let tipSelection=(Double)(tipPercentage)
+        
+        let tipAmount=checkAmout/100*tipSelection
+        
+        return checkAmout+tipAmount
+    }
+    
     var totalSplit:Double{
         
         let totalPeople=(Double)(numberOfPeople+2)
@@ -60,7 +68,11 @@ struct ContentView: View{
                     
                 }
                 
-                Section("Total Split :-"){
+                Section("Check Amount + Tip "){
+                    Text(checkPlusTip,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                }
+                
+                Section("Amount Per Person"){
                     Text(totalSplit,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                 }
             }
