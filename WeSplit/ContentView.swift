@@ -7,97 +7,74 @@
 
 import SwiftUI
 
-//struct ContentView: View{
-//    
-//    @State private var checkAmout=0.0
-//    @State private var numberOfPeople=2
-//    @State private var tipAmount=10
-//    
-//    let tipPercentage=[10,15,20,25,0]
-//    
-//    var body: some View{
-//        NavigationStack{
-//            Form{
-//                Section{
-//                    TextField("Enter The Check Amount",value: $checkAmout,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-//                        .keyboardType(.decimalPad)
-//                }
-//                Section{
-//                    Text(checkAmout,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-//                }
-//            }
-//            
-//            .navigationTitle("WeSplit")
-//            .navigationBarTitleDisplayMode(.inline)
-//            
-//            
-//        }
-//    }
-//}
-
-struct ContentView: View {
-    @State private var name=""
-    @State private var tapCount=0
+struct ContentView: View{
     
-    var arrayOfStudents=["Hitesh","Atul","Honey"]
-    @State private var selectedStudent="Hitesh"
+    @State private var checkAmout = 0.0
+    @State private var numberOfPeople = 0
+    @State private var tipPercentage = 20
+    @FocusState private var amountOfFocus:Bool
     
-    var body: some View {
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
-//            Text("Hello, world!")
-//        }
-//        .padding()
+    var tipPercentages = [10,15,20,25,0]
+    
+    var totalSplit:Double{
         
+        let totalPeople=(Double)(numberOfPeople+2)
+        let tipSelection=(Double)(tipPercentage)
+        
+        let tipAmount=checkAmout/100*tipSelection
+        
+        let amountSplit=(checkAmout+tipAmount)/totalPeople
+        
+        return amountSplit
+    }
+    
+    var body: some View{
         NavigationStack{
             
             Form{
-                Section{
-                    Text("Hello World!..")
-                }
-                
-                Section{
-                    Picker("Select any Student",selection: $selectedStudent){
-                        ForEach(arrayOfStudents,id: \.self){
-                            Text($0)
+               
+                Section("Total Check Amount"){
+                    TextField("Amount",value: $checkAmout,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        .keyboardType(.decimalPad)
+                        .focused($amountOfFocus)
+                    
+                    Picker("Number of People",selection:$numberOfPeople){
+                        ForEach(2..<100)
+                        {
+                            Text("\($0) People")
                         }
                     }
+                    .pickerStyle(.navigationLink)
                 }
                 
+                Section("How much do you want to Tip?"){
                 
-                TextField("Enter your name",text: $name)
-                Text("This is \(name)")
-                Text("Creating")
-                Text("First SwiftUI")
-                Text("Application")
-                
-                Section{
-                    Text("Form and Sections")
-                    Text("Features of Swift")
-                    Text("🥳🥳🥳🥳🥳")
+                    Picker("Tip Percentage",selection: $tipPercentage)
+                    {
+                        ForEach(tipPercentages,id: \.self)
+                        {
+                            Text($0,format: .percent)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    
                 }
                 
-//                ForEach(0..<100){
-//                    Text("No. is \($0)")
-//                }
-                                
+                Section("Total Split :-"){
+                    Text(totalSplit,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                }
             }
             
-            
-            
-            Button("Tap Count : \(tapCount)"){
-                tapCount += 1
+            .navigationTitle("WeSplit")
+            .toolbar{
+                if amountOfFocus {
+                    Button("done"){
+                        amountOfFocus=false
+                    }
+                }
             }
-            .navigationTitle("SwiftUI")
-            .navigationBarTitleDisplayMode(.inline)
-            
             
         }
-        
-        
-        
     }
 }
 
