@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct ContentView: View{
     
     @State private var checkAmout = 0.0
@@ -69,7 +70,13 @@ struct ContentView: View{
                 }
                 
                 Section("Check Amount + Tip "){
-                    Text(checkPlusTip,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    if(tipPercentage==0){
+                        Text(checkPlusTip,format: .currency(code: Locale.current.currency?.identifier ?? "USD")).foregroundColor(.red)
+                    }
+                    else{
+                        Text(checkPlusTip,format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    }
+                        
                 }
                 
                 Section("Amount Per Person"){
